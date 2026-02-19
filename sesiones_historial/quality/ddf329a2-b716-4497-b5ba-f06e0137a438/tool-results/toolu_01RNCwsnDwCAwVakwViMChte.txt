@@ -1,0 +1,594 @@
+40-
+41-        const userMemberships = await db.user_group_membership.findMany({
+42-            where: { user_id: currentUserId },
+43-            select: { group_id: true }
+44-        });
+45:        const userGroupIds = userMemberships.map(m => m.group_id);
+46-
+47-        const filterConditions = [];
+48-
+49-        if (filters.created_at) {
+50-            const startDate = new Date(filters.created_at);
+--
+60-        }
+61-        if (filters.status?.length > 0) {
+62-            filterConditions.push({ status: { in: filters.status } });
+63-        }
+64-        if (filters.processing_status?.length > 0) {
+65:            filterConditions.push({ processing_status: { in: filters.processing_status.map(Number) } });
+66-        }
+67-        if (filters.ids?.length > 0) {
+68:            filterConditions.push({ id: { in: filters.ids.map(BigInt) } });
+69-        }
+70-        if (filters.id) {
+71-            filterConditions.push({ id: BigInt(filters.id) });
+72-        }
+73-        
+74-        const signerUserFilter = {};
+75:        if (filters.id_type?.length > 0) signerUserFilter.id_type = { in: filters.id_type.map(Number) };
+76-        if (filters.id_number?.length > 0) signerUserFilter.id_number = { in: filters.id_number };
+77-        if (filters.signer) {
+78-            signerUserFilter.OR = [
+79-                { firstname: { contains: filters.signer.toLowerCase() } },
+80-                { lastname: { contains: filters.signer.toLowerCase() } },
+--
+91-            filterConditions.push({ signers: { some: { status: { not: 'accepted' } } } });
+92-        }
+93-
+94-        if (filters.document_packages?.length > 0) {
+95-            const packageConditions = [];
+96:            const packageIds = filters.document_packages.map(p => BigInt(p)).filter(id => id !== 0n);
+97-            if (packageIds.length > 0) {
+98-                packageConditions.push({ document_package_header_id: { in: packageIds } });
+99-            }
+100-            if (filters.document_packages.includes(0)) {
+101-                packageConditions.push({ is_pdf: 1, document_package_header_id: null });
+--
+178-            }),
+179-        ]);
+180-
+181-        const companyAdvancedOptions = await db.company_advanced_options.findFirst({ where: { company_id: realCompanyId } });
+182-
+183:        const formattedData = results.map(item => {
+184-         
+185-            const { company, signers, documents, document_packages_header, ...rest } = item;
+186-            
+187-            const targetSigner = item.signers.find(s => s.order === 2) || item.signers.find(s => s.order === 1);
+188-
+189-            const targetUser = targetSigner?.users;
+190-            const total_signers = signers.length;
+191-            const completed_signers = signers.filter(s => s.status === 'accepted').length;
+192-
+193-            const signers_request = {
+194:                order: signers.map(s => s.order).join(','),
+195:                status_request: signers.map(s => s.status).join(','),
+196:                user_id_request: signers.map(s => s.user_id).join(','), 
+197-            };
+198-
+199-            const statusMap = { send: "0", accepted: "1", rejected: "2", canceled: "3", expired: "4", blocked: "5", "": "" };
+200-            const _status = statusMap[rest.status?.trim() || ""];
+201-
+--
+207-                created_at: rest.created_at,
+208-                updated_at: rest.updated_at,
+209-                name: `${targetUser?.firstname || ''} ${targetUser?.lastname || ''}`,
+210-                firstname: targetUser?.firstname,
+211-                lastname: targetUser?.lastname,
+212:                templates: documents.map(doc => ({ 
+213-                    id: doc.id, name: doc.name, request_id: rest.id, is_pdf: rest.is_pdf, 
+214-                    is_allowed: companyAdvancedOptions?.is_editing_document_allowed 
+215-                })),
+216-                total_signers,
+217-                completed_signers,
+--
+252-    }
+253-}
+254-
+255-function getServerIp() {
+256-  const interfaces = os.networkInterfaces();
+257:  for (const name of Object.keys(interfaces)) {
+258:    for (const iface of interfaces[name]) {
+259-      if (iface.family === 'IPv4' && !iface.internal) {
+260-        return iface.address;
+261-      }
+262-    }
+263-  }
+--
+506-
+507-        const dps = signer.document_packages_signers;
+508-        const user = signer.users;
+509-        const company = dps.company;
+510-        
+511:        const templates = dps.documents.map(doc => {
+512-            const templateVersion = doc.document_packages_details?.template;
+513-            const template = templateVersion
+514-            return {
+515-                id: doc.id,
+516-                name: doc.name,
+517-                visibility: doc.visibility,
+518-                pages_range: templateVersion?.pages_range,
+519-                visibility_activation_method: templateVersion?.visibility_activation_method,
+520:                template_fields: template?.templates?.template_fields.map(f => ({
+521-                    name: f.name,
+522-                    order: f.order,
+523-                    field_type_id: f.field_type_id,
+524-                    placeholder: f.placeholder,
+525-                    options: f.options,
+--
+544-            user: {
+545-                name: `${user.firstname} ${user.lastname}`,
+546-                email: user.email,
+547-                phone: user.phone,
+548-            },
+549:            request_features: dps.features.map(f => f.feature_id),
+550-            photo_control: advancedOptions?.photo_control || 0,
+551-            geolocation_control: advancedOptions?.geolocation_control || 0,
+552-            validation_code_control: advancedOptions?.validation_code_control || 0,
+553-            firstname: user.firstname,
+554-            lastname: user.lastname,
+--
+753-
+754-    return documentPackageToken && documentPackageToken.status == "accepted";
+755-}
+756-
+757-async function sendSolicitudesFirmaSequential(id, document_signers, company, valid_at_date, valid_at_hour, currentUserId, packageName) {
+758:    for (let i = 0; i < document_signers.length; i++) {
+759-        const signer = document_signers[i];
+760-
+761-        if (await hasSigned(signer)) {
+762-            console.log(`El firmante ${signer.user_id} ya ha firmado, no se envía solicitud de nuevo.`);
+763-            continue; 
+--
+850-
+851-    return { documentPackageSigner, signers, user };
+852-}
+853-
+854-async function processDocuments(documentPackageSigner, user, signImageBase64, ip, fieldsValues) {
+855:    const s3Keys = documentPackageSigner.documents.map(d => d.s3_key);
+856:    const ids = documentPackageSigner.documents.map(d => d.id);
+857-    const contentsFromS3 = await service.getContentFromS3(ids, s3Keys);
+858-    const htmlDocuments = [];
+859-    const private_key = fs.readFileSync("./my_key.key", "utf-8");
+860-
+861:    for (const doc of documentPackageSigner.documents) {
+862-        let htmlContent = contentsFromS3[doc.id];
+863-
+864-        const userSignatureHtml = createSignatureBlock(user, signImageBase64);
+865-        htmlContent = await findReplaceString(htmlContent, documentPackageSigner.signers[0].order, userSignatureHtml);
+866-
+--
+928-
+929-    if (defaultSigners.length === 0) {
+930-        return updatedHtml;
+931-    }
+932-
+933:    for (const defaultSigner of defaultSigners) {
+934-        const defaultUserData = await db.users.findFirst({
+935-            where: { id: parseInt(defaultSigner.user_id) },
+936-            select: { id: true, admin_sign: true, firstname: true, lastname: true, id_number: true, doc_type: { select: { abbreviation: true } } },
+937-        });
+938-
+--
+1065-            status: 1,
+1066-        },
+1067-    });
+1068-
+1069-    let selectedPackage = null;
+1070:    for (const pkg of allPackages) {
+1071-        let isExpired = false;
+1072-        const now = new Date();
+1073-        const expirationDate = pkg.expiration_date ? new Date(pkg.expiration_date) : null;
+1074-        const endDate = pkg.end_date ? new Date(pkg.end_date) : null;
+1075-
+--
+1233-    const allSigners = await db.document_signers.findMany({ 
+1234-        where: { document_package_signer_id: documentPackageSigner.id },
+1235-        select: { user_id: true }
+1236-    });
+1237-
+1238:    for (const signer of allSigners) {
+1239-        const user = await db.users.findFirst({
+1240-            where: {
+1241-                id: signer.user_id,
+1242-            },
+1243-            select: {
+--
+1276-            parseInt(documentPackageSigner.id)
+1277-        );
+1278-    }
+1279-    
+1280-    if (documentPackageSigner.document_packages_header.has_recipients === 1) {
+1281:        const groupEmails = documentPackageSigner.document_packages_header.group_recipients.map((recipient) => recipient.email);
+1282-
+1283-        (async () => {
+1284-            try {
+1285-                await service.sendGroupEmails(
+1286-                    groupEmails, 
+--
+1299-        })();
+1300-                 
+1301-    }
+1302-
+1303-    if (documentPackageSigner.document_packages_header.recipients_later === 1) {
+1304:        const groupEmails = documentPackageSigner.recipients.map((recipient) => recipient.email);
+1305-
+1306-        (async () => {
+1307-            try {
+1308-                await service.sendGroupEmails(
+1309-                    groupEmails, 
+--
+1440-        });
+1441-
+1442-        const signers = documentPackageSigner.signers;
+1443-        const documents = documentPackageSigner.documents;
+1444-
+1445:        const allSignatures = signers.map(signer => signer.sign).join('-');
+1446-
+1447:        for (const document of documents) {
+1448-            const documentString = `${document.id}-${allSignatures}-${documentPackageSignerId}`;
+1449-
+1450-            const documentHash = crypto.createHash('sha256').update(documentString).digest('hex');
+1451-
+1452-            await db.document_packages_signers_details_values.updateMany({
+--
+1477-    
+1478-    try {
+1479-        if (modified_content) {
+1480-            let content = modified_content;
+1481-
+1482:            for (const fieldValue of fieldsValues) {
+1483-                const { name, value } = fieldValue;
+1484-
+1485-                const fieldRegex = new RegExp("\\$\\[\\[" + name + "\\]\\]", "g");
+1486-            
+1487-                content = content.replace(fieldRegex, value !== undefined && value !== null ? value : `$[[${name}]]`);
+--
+1548-        }
+1549-
+1550-        const date = new Date().toLocaleDateString('es-CO');
+1551-        const time = new Date().toLocaleTimeString();
+1552-
+1553:        for (const signer of signers) {
+1554-            const user = await db.users.findFirst({
+1555-                where: { id: signer.user_id },
+1556-                select: { id: true, email: true, firstname: true, lastname: true }
+1557-            });
+1558-
+--
+1628-
+1629-    await checkAndFinalizeMultiple(item.id, company, user, htmlDocs);
+1630-}
+1631-
+1632-async function applySignatureToDocuments(documents, user, order) {
+1633:    const s3Keys = documents.map(d => d.s3_key);
+1634:    const ids = documents.map(d => d.id);
+1635-    const contentsFromS3 = await service.getContentFromS3(ids, s3Keys);
+1636-    const private_key = fs.readFileSync("./my_key.key", "utf-8");
+1637-    const processedHtmlDocs = [];
+1638-
+1639:    for (const doc of documents) {
+1640-        let htmlContent = contentsFromS3[doc.id];
+1641-        const signatureHtml = createSignatureBlock(user, user.admin_sign); 
+1642-        htmlContent = await findReplaceString(htmlContent, order, signatureHtml);
+1643-        //Modificar si se necesita la firma automática
+1644-       // htmlContent = await handleDefaultSigners(htmlContent, documentPackageSigner, ip);
+--
+1764-}
+1765-
+1766-async function doSignRequestMultiple(req, res) {
+1767-    try {
+1768-
+1769:        const [user, company] = await Promise.all([
+1770-            db.users.findFirst({
+1771-                where: { id: parseInt(req.body.user_id) },
+1772-                include: { doc_type: true },
+1773-            }),
+1774-            db.companies.findFirst({
+--
+1782-
+1783-        const itemsToProcess = [];
+1784-        const itemsRemoved = [];
+1785-        const processedIdsSet = new Set(); 
+1786-
+1787:        req.body.items.forEach(item => {
+1788-            if (item.user_id === parseInt(user.id)) {
+1789-                itemsToProcess.push(item);
+1790-                processedIdsSet.add(item.id); 
+1791-            }
+1792-        });
+1793-
+1794:        req.body.items.forEach(item => {
+1795-            if (item.user_id !== parseInt(user.id) && !processedIdsSet.has(item.id)) {
+1796-                itemsRemoved.push(item);
+1797-            }
+1798-        });
+1799-
+--
+1802-        }
+1803-        
+1804-        const processedIds = [];
+1805-        const failedIds = [];
+1806-
+1807:        for (const item of itemsToProcess) {
+1808-            try {
+1809-                await processSingleItemForMultipleSign(item, user, company, req.ip);
+1810-                processedIds.push(item.id);
+1811-            } catch (error) {
+1812-                console.error(`Error procesando el item ID ${item.id}:`, error);
+--
+1817-        return res.status(200).send({
+1818-            status: true,
+1819-            message: `Proceso completado. Firmados: ${processedIds.length}. Fallidos: ${failedIds.length}.`,
+1820-            items_signed: processedIds.join(", "),
+1821-            items_failed: failedIds.join(", "),
+1822:            itemsRemoved: [...new Set(itemsRemoved.map(item => item.id))].join(", ")
+1823-        });
+1824-
+1825-    } catch (err) {
+1826-        console.error("Error fatal en doSignRequestMultiple:", err);
+1827-        return res.status(500).send({
+--
+1887-async function processPdfsWithLambda(documentPackageSigner, signImage, userOrder) {
+1888-    const signedDocuments = [];
+1889-
+1890-    const logoBase64 = await fetchImageAsBase64('https://publicofirmadigital.s3.amazonaws.com/assets/img/templates/vertical_logo_qs.png');
+1891-
+1892:    for (const document of documentPackageSigner.documents) {
+1893-        const fields = JSON.parse(document.fields || '[]');
+1894-
+1895-        const specificField = fields.filter(field => {
+1896-            const fieldNameMatch = field.name.match(/\[\$FIRMA(\d+)\]/);
+1897-            return fieldNameMatch && parseInt(fieldNameMatch[1]) === userOrder;
+--
+1994-    const company = documentPackageSigner.company;
+1995-
+1996-    const date = new Date(updatedPackage.updated_at).toLocaleDateString('es-CO');
+1997-    const time = new Date(updatedPackage.updated_at).toLocaleTimeString('es-CO');
+1998-
+1999:    for (const signer of signers) {
+2000-        const user = await db.users.findUnique({ where: { id: signer.user_id } });
+2001-        if (user) {
+2002-            const token = service.generate(15); 
+2003-            await db.document_viewer.create({
+2004-                data: {
+--
+2023-            );
+2024-        }
+2025-    }
+2026-
+2027-    if (documentPackageSigner.recipients.length > 0) {
+2028:        const groupEmails = documentPackageSigner.recipients.map(r => r.email);
+2029-        if (groupEmails.length > 0) {
+2030-            await service.sendGroupEmails(
+2031-                groupEmails,
+2032-                documentPackageSigner.id,
+2033-                updatedPackage.updated_at,
+--
+2040-        }
+2041-    }
+2042-}
+2043-
+2044-async function getSignedPdfBuffersFromS3(signedDocuments) {
+2045:    return Promise.all(signedDocuments.map(async (doc) => {
+2046-        const s3Params = { Bucket: process.env.S3_BUCKET, Key: doc.key };
+2047-        const data = await s3Client.send(new GetObjectCommand(s3Params));
+2048-        return { name: doc.name, buffer: await data.Body.transformToByteArray() };
+2049-    }));
+2050-}
+2051-
+2052-async function getDocumentHashes(documents) {
+2053:    const hashes = await Promise.all(documents.map(doc =>
+2054-        db.document_packages_signers_details_values.findFirst({
+2055-            where: { id: parseInt(doc.id) },
+2056-            select: { document_hash: true }
+2057-        })
+2058-    ));
+2059:    return documents.map((doc, index) => ({
+2060-        name: doc.name,
+2061-        hash: hashes[index]?.document_hash || null,
+2062-    }));
+2063-}
+2064-
+--
+2078-
+2079-        const itemsToProcess = [];
+2080-        const itemsRemoved = [];
+2081-        const processedIdsSet = new Set();
+2082-
+2083:        req.body.items.forEach(item => {
+2084-            if (item.user_id === parseInt(user.id)) {
+2085-                itemsToProcess.push(item);
+2086-                processedIdsSet.add(item.id);
+2087-            }
+2088-        });
+2089:        req.body.items.forEach(item => {
+2090-            if (item.user_id !== parseInt(user.id) && !processedIdsSet.has(item.id)) {
+2091-                itemsRemoved.push(item);
+2092-            }
+2093-        });
+2094-
+2095-        const successResults = [];
+2096-        const failedResults = [];
+2097-
+2098:        for (const item of itemsToProcess) {
+2099-            try {
+2100-                const result = await processSinglePdfItem(item, user, req.ip);
+2101-                successResults.push(result);
+2102-            } catch (error) {
+2103-                console.error(`Error procesando el paquete de PDF ID ${item.id}:`, error);
+--
+2108-            }
+2109-        }
+2110-
+2111-        return res.status(200).send({
+2112-            status: true,
+2113:            message: "Proceso de firma masiva de PDFs finalizado.",
+2114-            signed_packages: successResults,
+2115-            failed_documents: failedResults,
+2116:            removed_packages: itemsRemoved.map(item => item.id),
+2117-        });
+2118-
+2119-    } catch (error) {
+2120:        console.error("Error en la firma masiva de PDFs:", error);
+2121:        res.status(500).json({ status: false, message: "Error en la firma masiva de PDFs" });
+2122-    }
+2123-}
+2124-
+2125-async function processSinglePdfItem(item, user, ip) {
+2126-
+--
+2185-
+2186-    await checkAndFinalizePdfPackage(mockTokenPayload, documentPackageSigner, documentPackageSigner.signers, signedDocuments);
+2187-
+2188-    return {
+2189-        id: item.id,
+2190:        documents: signedDocuments.map(d => d.name)
+2191-    };
+2192-}
+2193-
+2194-async function getCompany(companyId) {
+2195-    const company = await db.companies.findFirst({
+--
+2302-
+2303-
+2304-        let date = request.expires_in_days.toLocaleDateString('es-ES');
+2305-        let time = request.expires_in_days.toLocaleTimeString(); 
+2306-
+2307:        const userIds = request.signers.map(signer => signer.user_id);
+2308-
+2309-        const users = await db.users.findMany({
+2310-            where: {
+2311-                id: {
+2312-                    in: userIds
+--
+2322-        if (request.status === "send" || request.status === "rejected") {
+2323-
+2324-            const sortedSigners = [...request.signers].sort((a, b) => a.order - b.order);
+2325-
+2326-            if (request.document_packages_header.order == 1) {
+2327:                for (let i = 0; i < sortedSigners.length; i++) {
+2328-                    const signer = sortedSigners[i];
+2329-
+2330-                    if (signer.status === "accepted") continue;
+2331-
+2332-                    const previousUnsigned = sortedSigners
+--
+2359-                        status = true;
+2360-                        break; 
+2361-                    }
+2362-                }
+2363-            } else {
+2364:                for (const signer of sortedSigners) {
+2365-                    if (signer.status === "send" || signer.status === "rejected") {
+2366-                        const user = users.find(u => u.id === signer.user_id);
+2367-                        const _url = process.env.ENV_URL + signer.token;
+2368-
+2369-                        await service.sendSolicitudFirma(
+--
+2486-
+2487-
+2488-        let date = request.expires_in_days.toLocaleDateString('es-ES');
+2489-        let time = request.expires_in_days.toLocaleTimeString(); 
+2490-
+2491:        const userIds = request.signers.map(s => s.user_id);
+2492-        const users = await db.users.findMany({
+2493-            where: { id: { in: userIds } }
+2494-        });
+2495-
+2496-        const company = request.company;
+--
+2498-
+2499-        let message = "";
+2500-        let status = false;
+2501-
+2502-        if (request.status === "send" || request.status === "rejected") {
+2503:            for (const signer of request.signers) {
+2504-                if (signer.status === "send" || signer.status === "rejected") {
+2505-                    const user = users.find(u => u.id === signer.user_id);
+2506-                    const _url = process.env.ENV_URL + signer.token;
+2507-
+2508-                    await service.sendSolicitudFirma(
+--
+2646-                created_at: new Date(),
+2647-            },
+2648-        });
+2649-
+2650-        if (document_package_signer.signers && document_package_signer.signers.length > 0) {
+2651:            for (const signer of document_package_signer.signers) {
+2652-
+2653-                if (signer.users && signer.users.email) {
+2654-                    await service.sendCancelSignRequestNotification(
+2655-                        signer.users.email,
+2656-                        document_package_signer.company.avatar,
+--
+2739-
+2740-        let _data = [];
+2741-
+2742-        const data = signers;
+2743-
+2744:        for (let i = 0; i < data.length; i++) {
+2745-
+2746-            let _status = "";
+2747-            switch (data[i].status.trim()) {
+2748-                case "send":
+2749-                    _status = "0";
+--
+3117-            take: itemsPerPage,
+3118-        });
+3119-        
+3120-        const total = await db.attempts_log.count({ where });
+3121-
+3122:        const _data = await Promise.all(groupedLogs.map(async (group) => {
+3123-            const firstLog = await db.attempts_log.findFirst({
+3124-                where: {
+3125-                    user_id: group.user_id,
+3126-                    document_package_signer_id: group.document_package_signer_id,
+3127-                    company_id: group.company_id,
+--
+3173-        const where = {
+3174-            company_id: parseInt(req.body.company_id),
+3175-        };
+3176-
+3177-        if (req.body.items?.length > 0) {
+3178:            where.OR = req.body.items.map(item => {
+3179-                const attemptDate = new Date(item.attempt_date);
+3180-                const nextDay = new Date(attemptDate);
+3181-                nextDay.setDate(attemptDate.getDate() + 1);
+3182-
+3183-                return {
+--
+3200-            orderBy: {
+3201-                user_id: 'asc',
+3202-            },
+3203-        });
+3204-
+3205:        const detailedData = await Promise.all(groupedData.map(async (item) => {
+3206-            const firstLog = await db.attempts_log.findFirst({
+3207-                where: {
+3208-                    user_id: item.user_id,
+3209-                    document_package_signer_id: item.document_package_signer_id,
+3210-                },
+--
+3298-        }
+3299-    };
+3300-    
+3301-
+3302-    try {
+3303:        await Promise.all(req.body.images.map(image => uploadImage(image)));
+3304-        res.status(200).send({
+3305-            status: true,
+3306-            message: "Imágenes subidas correctamente.",
+3307-        });
+3308-    } catch (error) {
+--
+3538-                }
+3539-            }
+3540-        }); 
+3541-
+3542-
+3543:        const formattedLogs = logs.map(log => ({
+3544-            ...log,
+3545-            user: {
+3546-                ...log.user,
+3547-                fullName: log.user
+3548-                    ? `${log.user.firstname || ''} ${log.user.lastname || ''}`.trim()

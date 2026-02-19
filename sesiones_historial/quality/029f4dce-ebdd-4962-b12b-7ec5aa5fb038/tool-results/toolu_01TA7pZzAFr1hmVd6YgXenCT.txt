@@ -1,0 +1,143 @@
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-17-                   Agregar recordatorio
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-18-                </v-stepper-item>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-19-                <v-divider></v-divider>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue:20:                <template v-if="isDocumentReady && packageType.recipients_later == 1">
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-21-                    <v-stepper-item :complete="step > 3" :value="3" color="#007AFF">Agregar destinatarios</v-stepper-item>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-22-                    <v-divider></v-divider>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-23-                    <v-stepper-item  :value="4" color="#007AFF">Cargue de archivo</v-stepper-item>
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-109-                        </v-card-actions>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-110-                </v-stepper-window-item>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-111-               
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue:112:                <v-stepper-window-item :value="3" v-if="isDocumentReady && packageType.recipients_later == 1">
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-113-                    <v-container  density="compact" v-if="recipients?.length">
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-114-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-115-                        <v-col  cols="12"  v-for="(recipient, index) in recipients" :key="index">
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-175-                    </v-card-actions>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-176-                </v-stepper-window-item>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-177-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue:178:                <v-stepper-window-item :value="isDocumentReady && packageType.recipients_later == 1 ? 4 : 3">
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-179-                    <v-card-text>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-180-                        <v-row density="compact">
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-181-                            <v-col cols="12">
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-704-        },
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-705-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-706-        updateRecipients() {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue:707:            if (this.packageType.recipients_later == 1) {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-708-               this.recipients = [];
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-709-            }
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-710-        },
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-712-        addRecipient() {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-713-           
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-714-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue:715:            if (this.packageType.recipients_later !== 1) {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-716-                Swal.fire({
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-717-                    icon: 'warning',
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\bulk-request.vue-718-                    title: 'No permitido',
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-16-                <v-divider></v-divider>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-17-                <v-stepper-item :complete="step > reminderStepValue" :value="reminderStepValue" color="#007AFF">Agregar recordatorio</v-stepper-item>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-18-                <v-divider></v-divider>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue:19:                <template v-if="isDocumentReady && document.recipients_later == 1">
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-20-                    <v-stepper-item :complete="step > recipientStepValue" :value="recipientStepValue" color="#007AFF">Agregar destinatarios</v-stepper-item>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-21-                    <v-divider></v-divider>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-22-                    <v-stepper-item :value="signerStepValue" color="#007AFF">Agregar firmantes</v-stepper-item>
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-145-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-146-                    <v-card-actions class="d-flex justify-center">
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-147-                        <v-btn @click="goToStep(hasMultipleSigners ? scheduleStepValue : 2)" color="#007AFF" variant="outlined">Anterior</v-btn>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue:148:                        <v-btn @click="goToStep(isDocumentReady && document.recipients_later == 1 ? recipientStepValue : signerStepValue)"
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-149-                            :disabled="!isStep3Valid" color="#007AFF" variant="outlined">Siguiente</v-btn>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-150-                    </v-card-actions>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-151-                </v-stepper-window-item>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-152-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue:153:                <v-stepper-window-item :value="recipientStepValue" v-if="isDocumentReady && document.recipients_later == 1">
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-154-                    <v-container fluid class="pa-0">
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-155-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-156-                        <label>Fecha de envío de documentos firmados a remitentes:</label>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-157-                        <v-text-field
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue:158:                            v-model="recipientSendDate"
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-159-                            type="datetime-local"
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-160-                            variant="outlined"
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-161-                            density="compact"
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-263-                        :errors="errors"
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-264-                    />
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-265-                    <v-card-actions class="d-flex justify-center">
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue:266:                        <v-btn @click="goToStep(isDocumentReady && document && document.recipients_later == 1 ? recipientStepValue : reminderStepValue)" color="#007AFF" variant="outlined">Anterior</v-btn>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-267-                    </v-card-actions>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-268-                </v-stepper-window-item>
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-269-
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-593-            enableSignerSchedules: 2,
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-594-            recipientLoadMode: 'manual',
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-595-            recipientsExcelFile: null,
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue:596:            recipientSendDate: '',
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-597-            progressDialog: false,
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-598-            progressData: {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-599-                processed: 0,
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-642-        },
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-643-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-644-        signerStepValue() {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue:645:            const hasRecipientStep = this.isDocumentReady && this.document && this.document.recipients_later == 1;
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-646-            return hasRecipientStep ? this.recipientStepValue + 1 : this.reminderStepValue + 1;
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-647-        },
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-648-
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-975-        },
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-976-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-977-        updateRecipients() {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue:978:            if (this.document.recipients_later == 1) {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-979-               this.recipients = [];
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-980-            }
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-981-        },
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-982-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-983-        addRecipient() {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-984-           
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue:985:            if (this.document.recipients_later !== 1) {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-986-                Swal.fire({
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-987-                    icon: 'warning',
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-988-                    title: 'No permitido',
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-1291-                        sendReminder: this.sendReminder,
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-1292-                        reminder_days_interval: this.reminder_days_interval,
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-1293-                        signerSchedules: this.enableSignerSchedules === 1 ? this.signerSchedules : [],
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue:1294:                        recipientSendDate: this.recipientSendDate,
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-1295-                    },
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-1296-                    responseType: 'text',
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\components\bulk-pdf\item-crud.vue-1297-                    onDownloadProgress: (progressEvent) => {
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-767-            const group = this.modelItem.builder.documentGroups.find(
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-768-                group => group.id === this.modelItem.editing.data.documentGroup
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-769-            );
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue:770:            return group?.recipients_later === 1;
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-771-        },
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-772-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-773-        isRecipientsLaterEnabled() {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-774-            const group = this.modelItem.builder.documentGroups.find(
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-775-                group => group.id === this.modelItem.editing.data.documentGroup
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-776-            );
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue:777:            return group?.recipients_later === 1;
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-778-        },
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-779-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-780-        zoomLevel() {
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1121-            const group = this.modelItem.builder.documentGroups.find(
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1122-                group => group.id === this.modelItem.editing.data.documentGroup
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1123-            );
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue:1124:            return group?.recipients_later === 1;
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1125-        },
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1126-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1127-        findMatch(fieldName, fieldType) {
+--
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1140-                group => group.id === this.modelItem.editing.data.documentGroup
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1141-            );
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1142-
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue:1143:            if (group?.recipients_later !== 1) {
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1144-                Swal.fire({
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1145-                    icon: 'warning',
+C:\Users\Hope\Documents\firma_prod\firmadigital\firma-digital-frontend\src\views\signature-requests\single-request.vue-1146-                    title: 'No permitido',
